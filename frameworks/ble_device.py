@@ -16,3 +16,6 @@ class SHBLEDevice:
 
     def send_code(self, code: bytes):
         self.__characteristic.write(code)
+
+    def __del__(self):
+        self.disconnect()
