@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask import jsonify
-from auth_handler import AuthHandler, auth_require
+from packages.services.server.auth_handler import AuthHandler, auth_require
 import os
 
 app = Flask(__name__)

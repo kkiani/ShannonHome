@@ -2,8 +2,8 @@ import uuid
 import hashlib
 from flask import jsonify, request
 from singleton_decorator import singleton
-from disposable_token import DisposableToken
-from config import *
+from packages.services.server.disposable_token import DisposableToken
+from packages.services.serverconfig import *
 
 @singleton
 class AuthHandler:
