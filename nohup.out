@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/kiarash/.pyenv/versions/3.6.9/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/Users/kiarash/.pyenv/versions/3.6.9/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/Users/kiarash/projects/Shannon/packages/services/server/app.py", line 3, in <module>
+    from auth_handler import AuthHandler, auth_require
+ModuleNotFoundError: No module named 'auth_handler'
