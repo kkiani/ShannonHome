@@ -22,6 +22,8 @@ function cleanSystem {
 
 function update {
     status "[*] pull updates from source."
+    git clean -df
+    git checkout -- .
     git pull origin master
 }
 
