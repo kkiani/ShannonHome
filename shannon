@@ -11,7 +11,7 @@ echo "----------------------------------------------------- "
 function run {
     status "[*] running services."
     python3 -m packages.services.hws.hws restart
-    nohup python3 -m packages.services.server.app &
+    sudo nohup python3 -m packages.services.server.app &
 }
 
 function cleanSystem {
