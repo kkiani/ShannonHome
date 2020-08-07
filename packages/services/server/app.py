@@ -6,6 +6,7 @@ import os
 import time
 
 app = Flask(__name__)
+hardware_request = SHHardwareRequets()
 is_lamp_on = True
 
 @app.route('/')
@@ -58,7 +59,6 @@ def test():
 @app.route('/system/door', endpoint='door')
 @auth_require
 def door():
-    hardware_request = SHHardwareRequets()
     hardware_request.door(isLock=False)
     time.sleep(1.0)
     hardware_request.door(isLock=True)
@@ -71,7 +71,6 @@ def door():
 def lamp():
     global is_lamp_on
     state = request.args.get('state')
-    hardware_request = SHHardwareRequets()
     if state == 'switch':
         is_lamp_on = not is_lamp_on
         hardware_request.lamp(isOn=is_lamp_on)
@@ -100,7 +99,6 @@ def lamp():
 @app.route('/ota/door/<token>')
 def disposable_door(token):
     if AuthHandler().validate(token):
-        hardware_request = SHHardwareRequets()
         hardware_request.door(isLock=False)
         time.sleep(1.0)
         hardware_request.door(isLock=True)
@@ -115,7 +113,6 @@ def disposable_door(token):
 @app.route('/ota/lamp/<token>')
 def disposable_lamp(token):
     if AuthHandler().validate(token):
-        hardware_request = SHHardwareRequets()
         is_lamp_on = not is_lamp_on
         hardware_request.lamp(isOn=is_lamp_on)
         return jsonify({
