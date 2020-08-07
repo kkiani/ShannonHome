@@ -2,11 +2,11 @@
 
 SOURCE="https://github.com/kkiani/ShannonHome"
 
-echo "------- Shannon Home Automation platform (2.0) ------ "
-echo "- copyright ~> Kiarash Kiani                        - "
-echo "- email     ~> kiani@kiarash.info                   - "
+echo "------- Shannon Home Automation platform (2.0) ------- "
+echo "- copyright ~> Kiarash Kiani                         - "
+echo "- email     ~> kiani@kiarash.info                    - "
 echo "- repo      ~> ${SOURCE} - "
-echo "----------------------------------------------------- "
+echo "------------------------------------------------------ "
 
 function checkRequierments {
     status "[*] check requierments exist."
