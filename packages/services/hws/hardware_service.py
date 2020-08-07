@@ -2,6 +2,10 @@
 import pika
 import serial
 
+
+arduino_address = "/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_854333332313515052D0-if00"
+arduino_serial_connection = serial.Serial(arduino_address, 9600, timeout=0.5)
+
 rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 rabbitmq_channel = rabbitmq_connection.channel()
 
@@ -21,11 +25,7 @@ def callback(ch, method, properties, body):
         print(' [!] unknown command: {}'.format(body))
 
 
-rabbitmq_channel.basic_consume(queue='com.shannon.hws', on_message_callback=callback, auto_ack=True)
-
-
-arduino_address = "/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_854333332313515052D0-if00"
-arduino_serial_connection = serial.Serial(arduino_address, 9600, timeout=0.5)
+rabbitmq_channel.basic_consume('com.shannon.hws', callback, auto_ack=True)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 rabbitmq_channel.start_consuming()
