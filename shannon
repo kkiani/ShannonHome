@@ -49,7 +49,7 @@ function status {
     echo -e "${COLOR}$1${NC}"
 }
 
-checkRequierments
 cleanSystem
 update
+checkRequierments
 run
