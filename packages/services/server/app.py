@@ -1,9 +1,13 @@
 from flask import Flask, request
 from flask import jsonify
 from packages.services.server.auth_handler import AuthHandler, auth_require
+from packages.services.hws.hardware_requests import SHHardwareRequets
 import os
+import time
 
 app = Flask(__name__)
+hardware_request = SHHardwareRequets()
+is_lamp_on = True
 
 @app.route('/')
 def index():
@@ -55,7 +59,9 @@ def test():
 @app.route('/system/door', endpoint='door')
 @auth_require
 def door():
-    os.system('hws door')
+    hardware_request.door(isLock=False)
+    time.sleep(1.0)
+    hardware_request.door(isLock=True)
     return jsonify({
         "message": "door unlocked"
     })
@@ -63,19 +69,23 @@ def door():
 @app.route('/system/lamp', endpoint='lamp')
 @auth_require
 def lamp():
+    global is_lamp_on
     state = request.args.get('state')
     if state == 'switch':
-        os.system('hws lampSwitch')
+        is_lamp_on != is_lamp_on
+        hardware_request.lamp(isOn=is_lamp_on)
         return jsonify({
             'message': 'lamp switched'
         })
     elif state == 'on':
-        os.system('hws lampOn')
+        is_lamp_on = True
+        hardware_request.lamp(isOn=True)
         return jsonify({
             'message': 'lamp turned on'
         })
     elif state == 'off':
-        os.system('hws lampOff')
+        is_lamp_on = False
+        hardware_request.lamp(isOn=False)
         return jsonify({
             'message': 'lamp turned off'
         })
@@ -89,7 +99,9 @@ def lamp():
 @app.route('/ota/door/<token>')
 def disposable_door(token):
     if AuthHandler().validate(token):
-        os.system('hws door')
+        hardware_request.door(isLock=False)
+        time.sleep(1.0)
+        hardware_request.door(isLock=True)
         return jsonify({
             "message": "door unlocked"
         })
@@ -101,7 +113,8 @@ def disposable_door(token):
 @app.route('/ota/lamp/<token>')
 def disposable_lamp(token):
     if AuthHandler().validate(token):
-        os.system('hws lampSwitch')
+        is_lamp_on != is_lamp_on
+        hardware_request.lamp(isOn=is_lamp_on)
         return jsonify({
             'message': 'lamp switched'
         })
