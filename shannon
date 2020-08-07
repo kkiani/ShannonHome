@@ -10,7 +10,7 @@ echo "----------------------------------------------------- "
 
 function checkRequierments {
     status "[*] check requierments exist."
-    if [ ! -f /etc/shannon.config ]; then
+    if [ ! -f /etc/shannon.conf ]; then
         error "[!] config file does not exist!"
     fi
 }
