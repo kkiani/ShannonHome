@@ -18,3 +18,7 @@ class SHHardwareRequets:
             self.rabbitmq_channel.basic_publish(exchange='', routing_key='com.shannon.hws', body='door lock')
         else:
             self.rabbitmq_channel.basic_publish(exchange='', routing_key='com.shannon.hws', body='door unlock')
+    
+    def __del__(self):
+        self.rabbitmq_channel.close()
+        self.rabbitmq_connection.close()
