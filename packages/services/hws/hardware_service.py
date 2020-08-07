@@ -20,12 +20,12 @@ def on_channel_open(new_channel):
     """Called when our channel has opened"""
     global channel
     channel = new_channel
-    channel.queue_declare(queue="test", durable=True, exclusive=False, auto_delete=False, callback=on_queue_declared)
+    channel.queue_declare(queue='com.shannon.hws', durable=True, exclusive=False, auto_delete=False, callback=on_queue_declared)
 
 # Step #4
 def on_queue_declared(frame):
     """Called when RabbitMQ has told us our Queue has been declared, frame is the response from RabbitMQ"""
-    channel.basic_consume('test', handle_delivery)
+    channel.basic_consume('com.shannon.hws', handle_delivery)
 
 # Step #5
 def handle_delivery(channel, method, header, body):
