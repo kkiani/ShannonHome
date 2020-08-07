@@ -22,7 +22,7 @@ def callback(ch, method, properties, body):
     elif body == b'door unlock':
         arduino_serial_connection.write("4")
     else:
-        print(f' [!] unknown command: {body}')
+        print(' [!] unknown command: {}'.format(body))
 
 
 rabbitmq_channel.basic_consume(queue='com.shannon.hws', on_message_callback=callback, auto_ack=True)
