@@ -7,7 +7,6 @@ import time
 
 app = Flask(__name__)
 hardware_request = SHHardwareRequets()
-is_lamp_on = True
 
 @app.route('/')
 def index():
@@ -73,7 +72,7 @@ def lamp():
     state = request.args.get('state')
     if state == 'switch':
         is_lamp_on = not is_lamp_on
-        hardware_request.lamp(isOn=is_lamp_on)
+        hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
         return jsonify({
             'message': 'lamp switched'
         })
@@ -114,7 +113,7 @@ def disposable_door(token):
 def disposable_lamp(token):
     if AuthHandler().validate(token):
         is_lamp_on = not is_lamp_on
-        hardware_request.lamp(isOn=is_lamp_on)
+        hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
         return jsonify({
             'message': 'lamp switched'
         })
