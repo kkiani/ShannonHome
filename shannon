@@ -18,8 +18,8 @@ function checkRequierments {
 function run {
     status "[*] running services."
     sudo service rabbitmq-server restart
-    nohup python3 -m packages.services.hws.hardware_service &
-    sudo nohup python3 -m packages.services.server.app &
+    sudo nohup python3 -m packages.services.hws.hardware_service & disown
+    sudo nohup python3 -m packages.services.server.app & disown
 }
 
 function cleanSystem {

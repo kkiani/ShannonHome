@@ -14,13 +14,13 @@ rabbitmq_channel.queue_declare(queue='com.shannon.hws')
 
 def callback(ch, method, properties, body):
     if body == b'lamp off':
-        arduino_serial_connection.write("2")
+        arduino_serial_connection.write(b"2")
     elif body == b'lamp on':
-        arduino_serial_connection.write("3")
+        arduino_serial_connection.write(b"3")
     elif body == b'door lock':
-        arduino_serial_connection.write("5")
+        arduino_serial_connection.write(b"5")
     elif body == b'door unlock':
-        arduino_serial_connection.write("4")
+        arduino_serial_connection.write(b"4")
     else:
         print(' [!] unknown command: {}'.format(body))
 
