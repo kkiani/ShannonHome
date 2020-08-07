@@ -68,10 +68,8 @@ def door():
 @app.route('/system/lamp', endpoint='lamp')
 @auth_require
 def lamp():
-    global is_lamp_on
     state = request.args.get('state')
     if state == 'switch':
-        is_lamp_on = not is_lamp_on
         hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
         return jsonify({
             'message': 'lamp switched'
@@ -112,7 +110,6 @@ def disposable_door(token):
 @app.route('/ota/lamp/<token>')
 def disposable_lamp(token):
     if AuthHandler().validate(token):
-        is_lamp_on = not is_lamp_on
         hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
         return jsonify({
             'message': 'lamp switched'
