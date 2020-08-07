@@ -25,7 +25,7 @@ def callback(ch, method, properties, body):
         print(' [!] unknown command: {}'.format(body))
 
 
-rabbitmq_channel.basic_consume('com.shannon.hws', callback, auto_ack=True)
+rabbitmq_channel.basic_consume('com.shannon.hws', callback, True)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 rabbitmq_channel.start_consuming()
