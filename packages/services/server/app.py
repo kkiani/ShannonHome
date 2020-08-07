@@ -61,7 +61,7 @@ def test():
 def door():
     hardware_request.door(isLock=False)
     time.sleep(1.0)
-    hardware_request.door(isLock=False)
+    hardware_request.door(isLock=True)
     return jsonify({
         "message": "door unlocked"
     })
@@ -101,7 +101,7 @@ def disposable_door(token):
     if AuthHandler().validate(token):
         hardware_request.door(isLock=False)
         time.sleep(1.0)
-        hardware_request.door(isLock=False)
+        hardware_request.door(isLock=True)
         return jsonify({
             "message": "door unlocked"
         })
