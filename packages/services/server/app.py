@@ -2,11 +2,15 @@ from flask import Flask, request
 from flask import jsonify
 from packages.services.server.auth_handler import AuthHandler, auth_require
 from packages.services.hws.hardware_requests import SHHardwareRequets
+from packages.services.sensor.sensor_service import SensorService
 import os
 import time
 
 app = Flask(__name__)
 hardware_request = SHHardwareRequets()
+sensor_service = SensorService()
+
+sensor_service.start()
 
 @app.route('/')
 def index():

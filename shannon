@@ -19,6 +19,7 @@ function run {
     status "[*] running services."
     sudo service rabbitmq-server restart
     sudo nohup python3 -m packages.services.hws.hardware_service & disown
+    sudo nohup python3 -m packages.services.sensor.sensor_driver & disown
     sudo nohup python3 -m packages.services.server.app & disown
 }
 
