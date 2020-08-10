@@ -14,6 +14,7 @@ class SensorService(threading.Thread):
     # privates
     __exchange_name = "com.shannon.sensor.motion"
     __hardware_service = SHHardwareRequets()
+    __lamp_state = False
 
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
@@ -32,13 +33,13 @@ class SensorService(threading.Thread):
     
     def callback_func(self, channel, method, properties, body):
         if body.decode("utf-8") == 'sensing':
-            if self.is_auto_light_on:
-                self.__hardware_service.lamp(isOn=True)
             self.is_motion_sensing = True
         elif  body.decode("utf-8")  == 'not sensing':
-            if self.is_auto_light_on:
-                self.__hardware_service.lamp(isOn=False)
             self.is_motion_sensing = False
         else:
             print(type(body))
+
+        if self.is_auto_light_on and self.__lamp_state != self.is_motion_sensing:
+            self.__lamp_state = self.is_motion_sensing
+            self.__hardware_service.lamp(isOn=self.is_motion_sensing)
 

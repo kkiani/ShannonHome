@@ -75,8 +75,14 @@ def autolight():
     state = request.args.get('state')
     if state == 'on':
         sensor_service.is_auto_light_on = True
+        return jsonify({
+            'message': 'autolight on'
+        })
     elif state == 'off':
         sensor_service.is_auto_light_on = False
+        return jsonify({
+            'message': 'autoligh off'
+        })
     else:
         return jsonify({
             "message": "state parameter should be on or off only"
