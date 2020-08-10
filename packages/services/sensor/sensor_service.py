@@ -39,7 +39,7 @@ class SensorService(threading.Thread):
         else:
             print(type(body))
 
-        if self.is_auto_light_on and self.__lamp_state != self.is_motion_sensing:
+        if self.is_auto_light_on:
             self.__lamp_state = self.is_motion_sensing
             self.__hardware_service.lamp(isOn=self.is_motion_sensing)
 
