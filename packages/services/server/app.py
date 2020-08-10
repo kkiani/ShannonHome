@@ -69,6 +69,20 @@ def door():
         "message": "door unlocked"
     })
 
+@app.route('/system/autolight', endpoint='autolight')
+@auth_require
+def autolight():
+    state = request.args.get('state')
+    if state == 'on':
+        sensor_service.is_auto_light_on = True
+    elif state == 'off':
+        sensor_service.is_auto_light_on = False
+    else:
+        return jsonify({
+            "message": "state parameter should be on or off only"
+        }), 406
+
+
 @app.route('/system/lamp', endpoint='lamp')
 @auth_require
 def lamp():
