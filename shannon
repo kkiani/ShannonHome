@@ -17,9 +17,9 @@ function checkRequierments {
 
 function run {
     status "[*] running services."
-    sudo service rabbitmq-server restart
+    sudo service rabbitmq-server start
     sudo nohup python3 -m packages.services.hws.hardware_service & disown
-    sudo nohup python3 -m packages.services.sensor.sensor_driver & disown
+    sudo nohup python3 -m packages.services.sensor.sensor_driver &
     sudo nohup python3 -m packages.services.server.app & disown
 }
 

@@ -2,6 +2,7 @@ import time
 from bluepy import btle
 import binascii
 import pika
+import threading
 
 class SensorBroadcaster(btle.DefaultDelegate):
     __EXCHANGE_NAME = "com.shannon.sensor.motion"
@@ -25,6 +26,7 @@ class SensorBroadcaster(btle.DefaultDelegate):
 
     def handleNotification(self, cHandle, data):
         status_code = binascii.hexlify(data)
+        print(status_code)
         if status_code == b'30':
             self.send('sensing')
         elif status_code == b'31':
@@ -32,7 +34,7 @@ class SensorBroadcaster(btle.DefaultDelegate):
         else:
             print(status_code)
 
-class SensorDriver:
+class SensorDriver(threading.Thread):
     address = '00:15:87:10:9A:4E'
     broadcaster = SensorBroadcaster()
 
@@ -44,7 +46,7 @@ class SensorDriver:
         self.svc = self.p.getServiceByUUID("0000ffe0-0000-1000-8000-00805f9b34fb")
         self.ch = self.svc.getCharacteristics()[0]
 
-    def loop_listening(self):
+    def run(self):
         while True:
             if self.p.waitForNotifications(1.0):
                 continue
@@ -59,4 +61,4 @@ class SensorDriver:
 
 driver = SensorDriver()
 driver.connect()
-driver.loop_listening()
+driver.start()
