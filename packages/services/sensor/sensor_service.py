@@ -47,7 +47,7 @@ class SensorService(threading.Thread):
 
         current_time = int(time.time())
 
-        if  self.is_motion_sensing:
+        if  self.delegate.is_lamp_on():
             self.__motion_last_update = current_time
 
         if self.__motion_last_update + self.__MOTION_DELAY < current_time:
