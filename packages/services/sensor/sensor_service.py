@@ -7,7 +7,6 @@ from packages.services.hws.hardware_requests import SHHardwareRequets
 class SensorService(threading.Thread):
     # public:
     is_motion_sensing = False
-    is_auto_light = False
     temperature = 0.0
     delegate = None
 
@@ -15,6 +14,7 @@ class SensorService(threading.Thread):
     __exchange_name = "com.shannon.sensor.motion"
     __motion_last_update = int(time.time())
     __MOTION_DELAY = 10 * 60    # 10 miniutes
+    __is_auto_light = False
 
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
@@ -41,8 +41,12 @@ class SensorService(threading.Thread):
         else:
             print(type(body))
 
+    def auto_light(self, is_on: bool):
+        self.__is_auto_light = is_on
+        self.__motion_last_update = int(time.time())
+
     def motion_did_update(self):
-        if self.is_auto_light == False:
+        if self.__is_auto_light == False:
             return
 
         current_time = int(time.time())
