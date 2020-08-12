@@ -26,7 +26,7 @@ class Services(SensorServiceDelegate):
 
     # SensorService Delegate:
     def is_lamp_on(self):
-        return self.__hardware.is_lamp_on()
+        return self.__hardware.is_lamp_on
 
     def set_lamp(self, on: bool):
         self.__hardware.lamp(isOn=on)
