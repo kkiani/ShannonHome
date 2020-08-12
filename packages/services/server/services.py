@@ -13,7 +13,7 @@ class Services(SensorServiceDelegate):
         self.__sensors.start()
     
     def lamp(self, is_on: bool):
-        self.__sensors.auto_light(is_on=False)
+        self.__sensors.is_auto_light = False
         self.__hardware.lamp(isOn=is_on)
     
     def door(self):
@@ -22,7 +22,7 @@ class Services(SensorServiceDelegate):
         self.__hardware.door(isLock=True)
 
     def auto_light(self, is_on: bool):
-        self.__sensors.auto_light(is_on=is_on)
+        self.__sensors.is_auto_light = is_on
 
     # SensorService Delegate:
     def is_lamp_on(self):
