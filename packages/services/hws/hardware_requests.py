@@ -27,6 +27,9 @@ class SHHardwareRequets:
         self.disconnect()
 
     def lamp(self, isOn: bool):
+        if self.is_lamp_on == isOn:
+            return
+            
         if isOn:
             self.send('lamp on')
         else:

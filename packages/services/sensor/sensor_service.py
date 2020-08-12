@@ -12,7 +12,7 @@ class SensorService(threading.Thread):
 
     # private:
     __exchange_name = "com.shannon.sensor.motion"
-    __motion_last_update = int(time.time())
+    __motion_last_sensing = int(time.time())
     __MOTION_DELAY = 10 * 60    # 10 miniutes
     __is_auto_light = False
 
@@ -43,20 +43,24 @@ class SensorService(threading.Thread):
 
     def auto_light(self, is_on: bool):
         self.__is_auto_light = is_on
-        self.__motion_last_update = int(time.time())
+        self.__motion_last_sensing = int(time.time())
 
     def motion_did_update(self):
         if self.__is_auto_light == False:
             return
 
         current_time = int(time.time())
+        is_delay_pass = (self.__motion_last_sensing + self.__MOTION_DELAY < current_time)
 
-        if  self.delegate.is_lamp_on():
-            self.__motion_last_update = current_time
+        if self.is_motion_sensing:
+            self.delegate.set_lamp(on=True)
+        elif self.delegate.is_lamp_on() and (not is_delay_pass):
+            self.delegate.set_lamp(on=True)
+        else:
+            self.delegate.set_lamp(on=False)
 
-        if self.__motion_last_update + self.__MOTION_DELAY < current_time:
-            if self.delegate.is_lamp_on() != self.is_motion_sensing:
-                self.delegate.set_lamp(on=self.is_motion_sensing)
+        if  self.delegate.is_lamp_on() and self.is_motion_sensing:
+            self.__motion_last_sensing = current_time
 
     def temperature_did_update(self):
         pass
