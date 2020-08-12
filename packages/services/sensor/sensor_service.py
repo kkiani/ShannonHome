@@ -42,11 +42,13 @@ class SensorService(threading.Thread):
             print(type(body))
 
     def motion_did_update(self):
-        if self.is_auto_light == False:
-            return
-
         current_time = int(time.time())
         is_delay_pass = (self.__motion_last_sensing + self.__MOTION_DELAY < current_time)
+
+        print('delay_pass: {}, is_sensing: {}, is_lamp_on: {}'.format(is_delay_pass, self.is_motion_sensing, self.delegate.is_lamp_on()))
+
+        if self.is_auto_light == False:
+            return
 
         if self.is_motion_sensing:
             self.delegate.set_lamp(on=True)
