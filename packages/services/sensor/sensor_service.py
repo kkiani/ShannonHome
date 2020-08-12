@@ -5,16 +5,16 @@ import time
 from packages.services.hws.hardware_requests import SHHardwareRequets
 
 class SensorService(threading.Thread):
-
     # public:
     is_motion_sensing = False
-    is_auto_light_on = False
+    is_auto_light = False
     temperature = 0.0
+    delegate = None
 
-    # privates
+    # private:
     __exchange_name = "com.shannon.sensor.motion"
-    __hardware_service = SHHardwareRequets()
-    __lamp_state = False
+    __motion_last_update = int(time.time())
+    __MOTION_DELAY = 10 * 60    # 10 miniutes
 
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
@@ -34,12 +34,33 @@ class SensorService(threading.Thread):
     def callback_func(self, channel, method, properties, body):
         if body.decode("utf-8") == 'sensing':
             self.is_motion_sensing = True
+            self.motion_did_update()
         elif  body.decode("utf-8")  == 'not sensing':
             self.is_motion_sensing = False
+            self.motion_did_update()
         else:
             print(type(body))
 
-        if self.is_auto_light_on and self.__lamp_state != self.is_motion_sensing:
-            self.__lamp_state = self.is_motion_sensing
-            self.__hardware_service.lamp(isOn=self.is_motion_sensing)
+    def motion_did_update(self):
+        if self.is_auto_light == False:
+            return
 
+        current_time = int(time.time())
+
+        if  self.is_motion_sensing:
+            self.__motion_last_update = current_time
+
+        if self.__motion_last_update + self.__MOTION_DELAY < current_time:
+            if self.delegate.is_lamp_on() != self.is_motion_sensing:
+                self.delegate.set_lamp(on=self.is_motion_sensing)
+
+    def temperature_did_update(self):
+        pass
+        
+
+class SensorServiceDelegate:
+    def is_lamp_on(self):
+        raise Exception('Sensor Service Delegate not implemented.')
+
+    def set_lamp(self, on: bool):
+        raise Exception('Sensor Service Delegate not implemented.')

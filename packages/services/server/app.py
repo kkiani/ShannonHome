@@ -1,16 +1,13 @@
 from flask import Flask, request
 from flask import jsonify
 from packages.services.server.auth_handler import AuthHandler, auth_require
-from packages.services.hws.hardware_requests import SHHardwareRequets
-from packages.services.sensor.sensor_service import SensorService
+from packages.services.server.services import Services
 import os
 import time
 
 app = Flask(__name__)
-hardware_request = SHHardwareRequets()
-sensor_service = SensorService()
+services = Services()
 
-sensor_service.start()
 
 @app.route('/')
 def index():
@@ -62,9 +59,7 @@ def test():
 @app.route('/system/door', endpoint='door')
 @auth_require
 def door():
-    hardware_request.door(isLock=False)
-    time.sleep(1.0)
-    hardware_request.door(isLock=True)
+    services.door()
     return jsonify({
         "message": "door unlocked"
     })
@@ -74,12 +69,12 @@ def door():
 def autolight():
     state = request.args.get('state')
     if state == 'on':
-        sensor_service.is_auto_light_on = True
+        services.auto_light(is_on=True)
         return jsonify({
             'message': 'autolight on'
         })
     elif state == 'off':
-        sensor_service.is_auto_light_on = False
+        services.auto_light(is_on=False)
         return jsonify({
             'message': 'autoligh off'
         })
@@ -94,19 +89,17 @@ def autolight():
 def lamp():
     state = request.args.get('state')
     if state == 'switch':
-        hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
+        services.lamp(is_on=(not services.is_lamp_on()))
         return jsonify({
             'message': 'lamp switched'
         })
     elif state == 'on':
-        is_lamp_on = True
-        hardware_request.lamp(isOn=True)
+        services.lamp(is_on=True)
         return jsonify({
             'message': 'lamp turned on'
         })
     elif state == 'off':
-        is_lamp_on = False
-        hardware_request.lamp(isOn=False)
+        services.lamp(is_on=False)
         return jsonify({
             'message': 'lamp turned off'
         })
@@ -120,9 +113,7 @@ def lamp():
 @app.route('/ota/door/<token>')
 def disposable_door(token):
     if AuthHandler().validate(token):
-        hardware_request.door(isLock=False)
-        time.sleep(1.0)
-        hardware_request.door(isLock=True)
+        services.door()
         return jsonify({
             "message": "door unlocked"
         })
@@ -134,7 +125,7 @@ def disposable_door(token):
 @app.route('/ota/lamp/<token>')
 def disposable_lamp(token):
     if AuthHandler().validate(token):
-        hardware_request.lamp(isOn=(not hardware_request.is_lamp_on))
+        services.lamp(is_on=(not services.is_lamp_on()))
         return jsonify({
             'message': 'lamp switched'
         })

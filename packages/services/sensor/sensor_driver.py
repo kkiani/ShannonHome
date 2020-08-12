@@ -26,7 +26,6 @@ class SensorBroadcaster(btle.DefaultDelegate):
 
     def handleNotification(self, cHandle, data):
         status_code = binascii.hexlify(data)
-        print(status_code)
         if status_code == b'30':
             self.send('sensing')
         elif status_code == b'31':
