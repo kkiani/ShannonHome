@@ -42,6 +42,9 @@ class SecurityService(SHServiceConsumer, SensorConnectionDelegate):
     
     # event handlers
     def handle_break_in(self):
+        if not self.is_enable:
+            return
+            
         current_time = int(time.time())
         if current_time > (self.__last_break_in + self.__BREAK_IN_DELAY):
             self._push.send_message('Security alert', 'someone is in your room.')
