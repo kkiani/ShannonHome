@@ -1,6 +1,9 @@
 import threading
 import pika
 import configparser
+import logging
+
+logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
 
 class SHConnectionConsumer(threading.Thread):
     # public:
@@ -14,6 +17,7 @@ class SHConnectionConsumer(threading.Thread):
         self.config.read('/etc/shannon.conf')
 
     def run(self):
+        logging.info(self.__exchange_name)
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.rabbitmq_channel = self.rabbitmq_connection.channel()
         self.rabbitmq_channel.exchange_declare(exchange=self.__exchange_name, exchange_type='fanout')
