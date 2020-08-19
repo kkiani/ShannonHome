@@ -36,7 +36,7 @@ class SensorService(threading.Thread):
         self.rabbitmq_channel.stop_consuming()
     
     def callback_func(self, channel, method, properties, body):
-        logging.debug('sensor consumer recived: {}'.format(body))
+        logging.info('sensor consumer recived: {}'.format(body))
         if body.decode("utf-8") == 'sensing':
             self.is_motion_sensing = True
             self.motion_did_update()
@@ -54,13 +54,17 @@ class SensorService(threading.Thread):
         is_delay_pass = (self.__motion_last_sensing + self.__MOTION_DELAY < current_time)
 
         if self.is_motion_sensing:
+            logging.info('if 1')
             self.delegate.set_lamp(on=True)
         elif self.delegate.is_lamp_on() and (not is_delay_pass):
+            logging.info('if 2')
             self.delegate.set_lamp(on=True)
         else:
+            logging.info('if 3')
             self.delegate.set_lamp(on=False)
 
         if  self.delegate.is_lamp_on() and self.is_motion_sensing:
+            logging.info('bloc if 2')
             self.__motion_last_sensing = current_time
 
     def temperature_did_update(self):
