@@ -15,7 +15,7 @@ class SensorService(threading.Thread):
     # private:
     __exchange_name = "com.shannon.sensor.motion"
     __motion_last_sensing = int(time.time())
-    __MOTION_DELAY = 10 * 60    # 10 miniutes
+    __MOTION_DELAY = 1 * 60    # 10 miniutes
 
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
