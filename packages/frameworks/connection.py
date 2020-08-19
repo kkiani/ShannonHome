@@ -35,7 +35,7 @@ class SHConnectionConsumer(threading.Thread):
 
 
 class SHConnectionProducer:
-     def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         # public:
         # private:
         self._exchange_name = 'com.shannon.framework.connection'
