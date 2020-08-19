@@ -33,6 +33,3 @@ class SHPushService():
 
     def __del__(self):
         self.__connection.close() 
-
-foo = SHPushService()
-foo.send_message('this is title', 'foo body')
