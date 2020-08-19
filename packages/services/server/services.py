@@ -14,7 +14,7 @@ class Services(SensorConnectionDelegate):
 
     # private:
     __motion_last_sensing = int(time.time())
-    __MOTION_DELAY = 1 * 60
+    __MOTION_DELAY = 2 * 60
 
     def __init__(self):
         self.sensors.delegate = self
