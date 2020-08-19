@@ -4,6 +4,7 @@ import configparser
 import logging
 
 logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
+logging.getLogger("pika").setLevel(logging.WARNING)
 
 class SHConnectionConsumer(threading.Thread):
     def __init__(self, *args, **kwargs):
