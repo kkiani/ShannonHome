@@ -69,12 +69,12 @@ def door():
 def autolight():
     state = request.args.get('state')
     if state == 'on':
-        services.auto_light(is_on=True)
+        services.is_auto_light = True
         return jsonify({
             'message': 'autolight on'
         })
     elif state == 'off':
-        services.auto_light(is_on=False)
+        services.is_auto_light = False
         return jsonify({
             'message': 'autoligh off'
         })
@@ -161,5 +161,5 @@ def page_not_found(e):
     }), 404
 
 if __name__ == "__main__":
-    services.push.send_message('System Status', 'System startup and run successfully')
+    services.push.send_message('System Status', 'System is up and run successfully')
     app.run(debug=False, port=80, host='0.0.0.0')
