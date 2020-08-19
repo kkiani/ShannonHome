@@ -3,7 +3,10 @@ import threading
 import binascii
 import time
 from packages.services.hws.hardware_requests import SHHardwareRequets
+import configparser
+import logging
 
+logging.basicConfig(filename='/system/Shannon/motion.log',level=logging.DEBUG)
 
 class SensorService(threading.Thread):
     # public:
@@ -33,6 +36,7 @@ class SensorService(threading.Thread):
         self.rabbitmq_channel.stop_consuming()
     
     def callback_func(self, channel, method, properties, body):
+        logging.debug('sensor consumer recived: {}'.format(body))
         if body.decode("utf-8") == 'sensing':
             self.is_motion_sensing = True
             self.motion_did_update()

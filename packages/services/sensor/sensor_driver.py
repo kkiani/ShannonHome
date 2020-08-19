@@ -3,7 +3,6 @@ from bluepy import btle
 import binascii
 import pika
 import threading
-import logging
 
 class SensorBroadcaster(btle.DefaultDelegate):
     __EXCHANGE_NAME = "com.shannon.sensor.motion"
@@ -58,8 +57,6 @@ class SensorDriver(threading.Thread):
         self.broadcaster.send(message)
 
 
-
-logging.basicConfig(filename='sensor_driver.log',level=logging.DEBUG)
 
 driver = SensorDriver()
 driver.connect()
