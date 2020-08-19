@@ -8,49 +8,45 @@ class Services(SensorConnectionDelegate):
     # public:
     push = SHPushService()
     is_auto_light = False
+    hardware = SHHardwareRequets()
+    sensors = SensorConnection()
+    security = SecurityConnection()
 
     # private:
-    __hardware = SHHardwareRequets()
-    __sensors = SensorConnection()
-    __security = SecurityConnection()
     __motion_last_sensing = int(time.time())
     __MOTION_DELAY = 1 * 60
 
     def __init__(self):
-        self.__sensors.delegate = self
-        self.__sensors.start()
+        self.sensors.delegate = self
+        self.sensors.start()
     
     def lamp(self, is_on: bool):
         self.is_auto_light = False
-        self.__hardware.lamp(isOn=is_on)
+        self.hardware.lamp(isOn=is_on)
     
     def door(self):
-        self.__hardware.door(isLock=False)
+        self.hardware.door(isLock=False)
         time.sleep(1.0)
-        self.__hardware.door(isLock=True)
-
-    def security(self, is_on: bool):
-        if is_on:
-            self.__security.send_event(SecurityEvent.SECURITY_ON)
-        else:
-            self.__security.send_event(SecurityEvent.SECURITY_OFF)
+        self.hardware.door(isLock=True)
 
     # Sensor Connection Delegate:
     def motion_did_update(self):
+        self.security.send_event(SecurityEvent.MOTION_SENSE)
+
         if self.is_auto_light == False:
             return
         
         current_time = int(time.time())
         is_delay_pass = (self.__motion_last_sensing + self.__MOTION_DELAY < current_time)
 
-        if self.__sensors.is_motion_sensing:
-            self.__hardware.lamp(isOn=True)
-        elif self.__hardware.is_lamp_on and (not is_delay_pass):
-            self.__hardware.lamp(isOn=True)
+        if self.sensors.is_motion_sensing:
+            self.hardware.lamp(isOn=True)
+        elif self.hardware.is_lamp_on and (not is_delay_pass):
+            self.hardware.lamp(isOn=True)
         else:
-            self.__hardware.lamp(isOn=False)
+            self.hardware.lamp(isOn=False)
 
-        if  self.__hardware.is_lamp_on and self.__sensors.is_motion_sensing:
+        if  self.hardware.is_lamp_on and self.sensors.is_motion_sensing:
             self.__motion_last_sensing = current_time
 
     def temperature_did_update(self):

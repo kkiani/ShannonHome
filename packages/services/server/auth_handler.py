@@ -4,6 +4,9 @@ from flask import jsonify, request
 from singleton_decorator import singleton
 from packages.services.server.disposable_token import DisposableToken
 from packages.services.server.config import *
+from packages.services.security.security_connection import SecurityConnection, SecurityEvent
+
+securityConnection = SecurityConnection()
 
 @singleton
 class AuthHandler:
@@ -47,6 +50,7 @@ def auth_require(func):
     def check_token(*args, **kwargs):
         # Check to see if it's in their session
         if request.headers.get('x-token') != AuthHandler().token:
+            securityConnection.send_event(SecurityEvent.LOGIN_FAIL_ATTEMPT)
             return jsonify({
                 "message": "Access denied"
             }), 401

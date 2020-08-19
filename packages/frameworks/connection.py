@@ -35,9 +35,10 @@ class SHConnectionConsumer(threading.Thread):
 
 
 class SHConnectionProducer:
-    # public:
-    # private:
-    __exchange_name = 'com.shannon.framework.connection'
+     def __init__(self, *args, **kwargs):
+        # public:
+        # private:
+        self._exchange_name = 'com.shannon.framework.connection'
 
     # only to have same interface with SHConnectionConsumer
     def start(self):
@@ -45,13 +46,13 @@ class SHConnectionProducer:
 
     def send(self, message):
         self.connect()
-        self.rabbitmq_channel.basic_publish(exchange=self.__exchange_name, routing_key='', body=message)
+        self.rabbitmq_channel.basic_publish(exchange=self._exchange_name, routing_key='', body=message)
         self.disconnect()
 
     def connect(self):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.rabbitmq_channel = self.rabbitmq_connection.channel()
-        self.rabbitmq_channel.exchange_declare(exchange=self.__exchange_name, exchange_type='fanout', arguments={'x-max-length': 10})
+        self.rabbitmq_channel.exchange_declare(exchange=self._exchange_name, exchange_type='fanout', arguments={'x-max-length': 10})
 
     def disconnect(self):
         self.rabbitmq_channel.close()

@@ -4,15 +4,15 @@ import logging
 logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
 
 class SensorConnection(SHConnectionConsumer):
-    # public:
-    is_motion_sensing = False
-    temperature = 0.0
-    delegate = None
-
-    # private:
-
     def __init__(self, *args, **kwargs):
         super(SensorConnection, self).__init__(*args, **kwargs)
+
+        # public:
+        self.is_motion_sensing = False
+        self.temperature = 0.0
+        self.delegate = None
+        
+        # private:
         self._exchange_name = "com.shannon.sensor.motion"
 
     def callback_func(self, channel, method, properties, body):

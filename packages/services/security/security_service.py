@@ -4,15 +4,15 @@ from packages.services.push.push import SHPushService
 import logging
 
 class SecurityService(SHServiceConsumer):
-    # public:
-    is_enable = False
-
-    # privete:
-    __push = SHPushService()
-
     def __init__(self, *args, **kwargs):
         super(SecurityService, self).__init__(*args, **kwargs)
-        self.__exchange_name = 'com.shannon.security'
+        
+        # public:
+        self.is_enable = False
+
+        # privete:
+        self._push = SHPushService()
+        self._exchange_name = 'com.shannon.security'
 
     def callback_func(self, channel, method, properties, body):
         message = body.decode("utf-8")

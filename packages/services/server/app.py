@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask import jsonify
 from packages.services.server.auth_handler import AuthHandler, auth_require
-from packages.services.server.services import Services
+from packages.services.server.services import Services, SecurityEvent
 import os
 import time
 
@@ -113,12 +113,12 @@ def lamp():
 def security():
     state = request.args.get('state')
     if state == 'on':
-        services.security(is_on=True)
+        services.security.send_event(SecurityEvent.SECURITY_ON)
         return jsonify({
             'message': 'security on'
         })
     elif state == 'off':
-        services.security(is_on=True)
+        services.security.send_event(SecurityEvent.SECURITY_ON)
         return jsonify({
             'message': 'security off'
         })
@@ -136,6 +136,7 @@ def disposable_door(token):
             "message": "door unlocked"
         })
     else:
+        services.security.send_event(SecurityEvent.BAD_TOKEN_ATTEMPT)
         return jsonify({
             'message': 'access denied'
         }), 401
@@ -148,6 +149,7 @@ def disposable_lamp(token):
             'message': 'lamp switched'
         })
     else:
+        services.security.send_event(SecurityEvent.BAD_TOKEN_ATTEMPT)
         return jsonify({
             'message': 'access denied'
         }), 401
