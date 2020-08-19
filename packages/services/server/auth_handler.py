@@ -19,7 +19,7 @@ class AuthHandler:
 
     def validate_password(self, password):
         hashed_password = hashlib.sha512(password.encode('utf-8')).hexdigest()
-        return hashed_password == password
+        return hashed_password == PASSWORD
 
     def renew_token(self):
         self.__token = uuid.uuid4().hex
