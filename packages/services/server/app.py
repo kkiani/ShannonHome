@@ -25,6 +25,7 @@ def generateToken():
             "token": AuthHandler().renew_token()
         })
     else:
+        services.security.send_event(SecurityEvent.LOGIN_FAIL_ATTEMPT)
         return jsonify({
             'message': 'password did not match'
         }), 401

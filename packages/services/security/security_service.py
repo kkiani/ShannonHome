@@ -40,7 +40,7 @@ class SecurityService(SHServiceConsumer):
         self._push.send_message('Security alert', 'a failed attempt with broken token to chenge system controls happend.')
 
     def handle_failed_login(self):
-        self._push.send_message('Security alert', 'a failed loggin attempt has been occurred.')
+        self._push.send_message('Security alert', 'a failed login attempt has been occurred.')
 
     def handle_unkown_event(self, event_message):
         self._push.send_message('Security alert', 'System recived an unkown security event.')

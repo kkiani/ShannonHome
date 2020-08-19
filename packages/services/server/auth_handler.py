@@ -19,7 +19,7 @@ class AuthHandler:
 
     def validate_password(self, password):
         hashed_password = hashlib.sha512(password.encode('utf-8')).hexdigest()
-        return hashed_password == PASSWORD
+        return hashed_password == password
 
     def renew_token(self):
         self.__token = uuid.uuid4().hex
@@ -50,7 +50,7 @@ def auth_require(func):
     def check_token(*args, **kwargs):
         # Check to see if it's in their session
         if request.headers.get('x-token') != AuthHandler().token:
-            securityConnection.send_event(SecurityEvent.LOGIN_FAIL_ATTEMPT)
+            securityConnection.send_event(SecurityEvent.BAD_TOKEN_ATTEMPT)
             return jsonify({
                 "message": "Access denied"
             }), 401
