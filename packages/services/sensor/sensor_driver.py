@@ -3,6 +3,7 @@ from bluepy import btle
 import binascii
 import pika
 import threading
+import logging
 
 class SensorBroadcaster(btle.DefaultDelegate):
     __EXCHANGE_NAME = "com.shannon.sensor.motion"
@@ -18,7 +19,7 @@ class SensorBroadcaster(btle.DefaultDelegate):
     def connect(self):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.rabbitmq_channel = self.rabbitmq_connection.channel()
-        self.rabbitmq_channel.exchange_declare(exchange=self.__EXCHANGE_NAME, exchange_type='fanout')
+        self.rabbitmq_channel.exchange_declare(exchange=self.__EXCHANGE_NAME, exchange_type='fanout', arguments={'x-max-length': 10})
 
     def disconnect(self):
         self.rabbitmq_channel.close()
@@ -57,6 +58,8 @@ class SensorDriver(threading.Thread):
         self.broadcaster.send(message)
 
 
+
+logging.basicConfig(filename='sensor_driver.log',level=logging.DEBUG)
 
 driver = SensorDriver()
 driver.connect()
