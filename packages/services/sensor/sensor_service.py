@@ -21,7 +21,7 @@ class SensorService(threading.Thread):
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
         self.config.read('/etc/shannon.conf')
-        self.__MOTION_DELAY = int(self.config["SENSOR"]["delay"])
+        self.__MOTION_DELAY = int(self.config["SENSOR"]["delay"]) * 60
     
     def run(self):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
