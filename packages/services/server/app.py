@@ -90,7 +90,7 @@ def autolight():
 def lamp():
     state = request.args.get('state')
     if state == 'switch':
-        services.lamp(is_on=(not services.is_lamp_on()))
+        services.lamp(is_on=(not services.hardware.is_lamp_on))
         return jsonify({
             'message': 'lamp switched'
         })

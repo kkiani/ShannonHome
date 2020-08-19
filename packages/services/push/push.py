@@ -29,7 +29,8 @@ class SHPushService():
             "url_title":url_title,
             "priority":priority.value,
             }), { "Content-type": "application/x-www-form-urlencoded" })
-        self.__connection.getresponse()
+        resp = self.__connection.getresponse()
+        resp.read()
 
     def __del__(self):
         self.__connection.close() 
