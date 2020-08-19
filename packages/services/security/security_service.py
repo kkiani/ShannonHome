@@ -2,6 +2,7 @@ from packages.frameworks.service import SHServiceConsumer
 from packages.services.security.security_events import SecurityEvent
 from packages.services.push.push import SHPushService
 import logging
+import time
 
 class SecurityService(SHServiceConsumer):
     def __init__(self, *args, **kwargs):
@@ -13,6 +14,8 @@ class SecurityService(SHServiceConsumer):
         # privete:
         self._push = SHPushService()
         self._exchange_name = 'com.shannon.security'
+        self.__BREAK_IN_DELAY = 2 * 60
+        self.__last_break_in = int(time.time()) - self.__BREAK_IN_DELAY
 
     def callback_func(self, channel, method, properties, body):
         message = body.decode("utf-8")
@@ -34,7 +37,10 @@ class SecurityService(SHServiceConsumer):
     
     # event handlers
     def handle_break_in(self):
-        self._push.send_message('Security alert', 'someone is in your room.')
+        current_time = int(time.time())
+        if current_time > (self.__last_break_in + self.__BREAK_IN_DELAY):
+            self._push.send_message('Security alert', 'someone is in your room.')
+            self.__last_break_in = current_time
 
     def handle_failed_token(self):
         self._push.send_message('Security alert', 'a failed attempt with broken token to chenge system controls happend.')
