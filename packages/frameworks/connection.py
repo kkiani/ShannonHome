@@ -6,15 +6,14 @@ import logging
 logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
 
 class SHConnectionConsumer(threading.Thread):
-    # public:
-    config = configparser.ConfigParser()
-
-    # private:
-    __exchange_name = 'com.shannon.framework.connection'
-
     def __init__(self, *args, **kwargs):
         super(SHConnectionConsumer, self).__init__(*args, **kwargs)
+        
+        self.config = configparser.ConfigParser()
         self.config.read('/etc/shannon.conf')
+        
+        self.__exchange_name = 'com.shannon.framework.connection'
+        
 
     def run(self):
         logging.info(self.__exchange_name)
