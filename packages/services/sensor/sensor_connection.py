@@ -15,9 +15,11 @@ class SensorConnection(SHConnectionConsumer):
     def callback_func(self, channel, method, properties, body):
         try:
             if body.decode("utf-8") == 'sensing':
+                logging.debug('foo1')
                 self.is_motion_sensing = True
                 self.delegate.motion_did_update()
             elif  body.decode("utf-8")  == 'not sensing':
+                logging.debug('foo2')
                 self.is_motion_sensing = False
                 self.delegate.motion_did_update()
             else:
