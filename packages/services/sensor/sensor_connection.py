@@ -10,7 +10,10 @@ class SensorConnection(SHConnectionConsumer):
     delegate = None
 
     # private:
-    __exchange_name = "com.shannon.sensor.motion"
+
+    def __init__(self, *args, **kwargs):
+        super(SensorConnection, self).__init__(*args, **kwargs)
+        self.__exchange_name = "com.shannon.sensor.motion"
 
     def callback_func(self, channel, method, properties, body):
         try:
