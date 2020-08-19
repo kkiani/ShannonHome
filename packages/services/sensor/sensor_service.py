@@ -4,9 +4,6 @@ import binascii
 import time
 from packages.services.hws.hardware_requests import SHHardwareRequets
 import configparser
-import logging
-
-logging.basicConfig(filename='/system/ShannonHome/motion.log',level=logging.DEBUG)
 
 class SensorService(threading.Thread):
     # public:
@@ -14,14 +11,17 @@ class SensorService(threading.Thread):
     is_auto_light = False
     temperature = 0.0
     delegate = None
+    config = configparser.ConfigParser()
 
     # private:
     __exchange_name = "com.shannon.sensor.motion"
     __motion_last_sensing = int(time.time())
-    __MOTION_DELAY = 1 * 60    # 10 miniutes
+    __MOTION_DELAY = 1 * 60    # 1 miniute default
 
     def __init__(self, *args, **kwargs):
         super(SensorService, self).__init__(*args, **kwargs)
+        self.config.read('/etc/shannon.conf')
+        self.__MOTION_DELAY =  self.config["SENSOR"]["delay"]
     
     def run(self):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
@@ -36,7 +36,6 @@ class SensorService(threading.Thread):
         self.rabbitmq_channel.stop_consuming()
     
     def callback_func(self, channel, method, properties, body):
-        logging.info('sensor consumer recived: {}'.format(body))
         if body.decode("utf-8") == 'sensing':
             self.is_motion_sensing = True
             self.motion_did_update()
@@ -54,17 +53,13 @@ class SensorService(threading.Thread):
         is_delay_pass = (self.__motion_last_sensing + self.__MOTION_DELAY < current_time)
 
         if self.is_motion_sensing:
-            logging.info('if 1')
             self.delegate.set_lamp(on=True)
         elif self.delegate.is_lamp_on() and (not is_delay_pass):
-            logging.info('if 2')
             self.delegate.set_lamp(on=True)
         else:
-            logging.info('if 3')
             self.delegate.set_lamp(on=False)
 
         if  self.delegate.is_lamp_on() and self.is_motion_sensing:
-            logging.info('bloc if 2')
             self.__motion_last_sensing = current_time
 
     def temperature_did_update(self):
