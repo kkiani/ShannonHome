@@ -1,5 +1,7 @@
 from packages.frameworks.connection import SHConnectionConsumer
+import logging
 
+logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
 
 class SensorConnection(SHConnectionConsumer):
     # public:
@@ -10,14 +12,17 @@ class SensorConnection(SHConnectionConsumer):
     # private:
 
     def callback_func(self, channel, method, properties, body):
-        if body.decode("utf-8") == 'sensing':
-            self.is_motion_sensing = True
-            self.delegate.motion_did_update()
-        elif  body.decode("utf-8")  == 'not sensing':
-            self.is_motion_sensing = False
-            self.motion_did_update()
-        else:
-            print(type(body))
+        try:
+            if body.decode("utf-8") == 'sensing':
+                self.is_motion_sensing = True
+                self.delegate.motion_did_update()
+            elif  body.decode("utf-8")  == 'not sensing':
+                self.is_motion_sensing = False
+                self.delegate.motion_did_update()
+            else:
+                print(type(body))
+        except Exception as error:
+            logging.error(str(error))
 
 
 class SensorConnectionDelegate:
