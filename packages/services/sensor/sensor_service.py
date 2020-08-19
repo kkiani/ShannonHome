@@ -6,7 +6,7 @@ from packages.services.hws.hardware_requests import SHHardwareRequets
 import configparser
 import logging
 
-logging.basicConfig(filename='/system/Shannon/motion.log',level=logging.DEBUG)
+logging.basicConfig(filename='/system/ShannonHome/motion.log',level=logging.DEBUG)
 
 class SensorService(threading.Thread):
     # public:
