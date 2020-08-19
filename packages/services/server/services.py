@@ -31,8 +31,6 @@ class Services(SensorConnectionDelegate):
 
     # Sensor Connection Delegate:
     def motion_did_update(self):
-        self.security.send_event(SecurityEvent.MOTION_SENSE)
-
         if self.is_auto_light == False:
             return
         
