@@ -13,7 +13,7 @@ class SensorConnection(SHConnectionConsumer):
 
     def __init__(self, *args, **kwargs):
         super(SensorConnection, self).__init__(*args, **kwargs)
-        self.__exchange_name = "com.shannon.sensor.motion"
+        self._exchange_name = "com.shannon.sensor.motion"
         logging.info('fuck')
 
     def callback_func(self, channel, method, properties, body):
