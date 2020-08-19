@@ -28,7 +28,7 @@ class Services(SensorServiceDelegate):
         self.__sensors.is_auto_light = is_on
 
         if is_on:
-            self.push.send_message('Auto light mode turned on.')
+            self.push.send_message('System status changed', 'Auto light mode turned on.')
 
     # SensorService Delegate:
     def is_lamp_on(self):
