@@ -23,7 +23,7 @@ class SHConnectionConsumer(threading.Thread):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.rabbitmq_channel = self.rabbitmq_connection.channel()
         self.rabbitmq_channel.exchange_declare(exchange=self._exchange_name, exchange_type='fanout')
-        result = self.rabbitmq_channel.queue_declare(exclusive=True, queue='')
+        result = self.rabbitmq_channel.queue_declare(exclusive=True, queue='', arguments={'x-max-length': 1})
         self.rabbitmq_channel.queue_bind(result.method.queue, exchange=self._exchange_name)
         self.rabbitmq_channel.basic_consume(on_message_callback=self.callback_func, queue=result.method.queue)
         self.rabbitmq_channel.start_consuming()
@@ -53,7 +53,7 @@ class SHConnectionProducer:
     def connect(self):
         self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.rabbitmq_channel = self.rabbitmq_connection.channel()
-        self.rabbitmq_channel.exchange_declare(exchange=self._exchange_name, exchange_type='fanout', arguments={'x-max-length': 10})
+        self.rabbitmq_channel.exchange_declare(exchange=self._exchange_name, exchange_type='fanout', arguments={'x-max-length': 1})
 
     def disconnect(self):
         self.rabbitmq_channel.close()
