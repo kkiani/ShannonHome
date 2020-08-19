@@ -108,6 +108,24 @@ def lamp():
             "message": "state parameter should be switch, on or off only"
         }), 406
 
+@app.route('/system/security', endpoint='security')
+@auth_require
+def security():
+    state = request.args.get('state')
+    if state == 'on':
+        services.security(is_on=True)
+        return jsonify({
+            'message': 'security on'
+        })
+    elif state == 'off':
+        services.security(is_on=True)
+        return jsonify({
+            'message': 'security off'
+        })
+    else:
+        return jsonify({
+            "message": "state parameter should be on or off only"
+        }), 406
 
 ### ---- disposable system actions
 @app.route('/ota/door/<token>')

@@ -1,6 +1,5 @@
 import pika
 import threading
-import binascii
 import time
 from packages.services.hws.hardware_requests import SHHardwareRequets
 import configparser
