@@ -1,9 +1,12 @@
 from packages.services.hws.hardware_requests import SHHardwareRequets
 from packages.services.sensor.sensor_service import SensorService, SensorServiceDelegate
+from packages.services.push.push import SHPushService
 import time
 
 class Services(SensorServiceDelegate):
     # public:
+    push = SHPushService()
+
     # private:
     __hardware = SHHardwareRequets()
     __sensors = SensorService()
@@ -23,6 +26,9 @@ class Services(SensorServiceDelegate):
 
     def auto_light(self, is_on: bool):
         self.__sensors.is_auto_light = is_on
+
+        if is_on:
+            self.push.send_message('Auto light mode turned on.')
 
     # SensorService Delegate:
     def is_lamp_on(self):
