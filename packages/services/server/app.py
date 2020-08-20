@@ -119,7 +119,7 @@ def security():
             'message': 'security on'
         })
     elif state == 'off':
-        services.security.send_event(SecurityEvent.SECURITY_ON)
+        services.security.send_event(SecurityEvent.SECURITY_OFF)
         return jsonify({
             'message': 'security off'
         })
