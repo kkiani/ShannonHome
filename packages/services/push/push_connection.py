@@ -13,4 +13,4 @@ class PushConnection():
         self.__client = Client(self.user_id, api_token=self.token)
 
     def send_message(self, title: str, message: str):
-        self.__client.send_message(title, message)
+        self.__client.send_message(message, title=title)
