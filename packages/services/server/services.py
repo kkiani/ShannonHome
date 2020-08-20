@@ -1,12 +1,12 @@
 from packages.services.hws.hardware_requests import SHHardwareRequets
-from packages.services.push.push import SHPushService
+from packages.services.push.push_connection import PushConnection
 from packages.services.sensor.sensor_connection import SensorConnection, SensorConnectionDelegate
 from packages.services.security.security_connection import SecurityConnection, SecurityEvent
 import time
 
 class Services(SensorConnectionDelegate):
     # public:
-    push = SHPushService()
+    push = PushConnection()
     is_auto_light = False
     hardware = SHHardwareRequets()
     sensors = SensorConnection()

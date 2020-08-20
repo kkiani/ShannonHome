@@ -1,6 +1,6 @@
 from packages.frameworks.service import SHServiceConsumer
 from packages.services.security.security_events import SecurityEvent
-from packages.services.push.push import SHPushService
+from packages.services.push.push_connection import PushConnection
 from packages.services.sensor.sensor_connection import SensorConnection, SensorConnectionDelegate
 import logging
 import time
@@ -13,7 +13,7 @@ class SecurityService(SHServiceConsumer, SensorConnectionDelegate):
         self.is_enable = False
 
         # privete:
-        self._push = SHPushService()
+        self._push = PushConnection()
         self._sensor = SensorConnection()
         self._exchange_name = 'com.shannon.security'
         self.__BREAK_IN_DELAY = 2 * 60
