@@ -24,7 +24,7 @@ def callback(ch, method, properties, body):
     else:
         print(' [!] unknown command: {}'.format(body))
 
-    rabbitmq_channel.basic_ack(method.delivery_tag)
+    method.basic_ack(method.delivery_tag)
 
 
 rabbitmq_channel.basic_consume(queue='com.shannon.hws', on_message_callback=callback)

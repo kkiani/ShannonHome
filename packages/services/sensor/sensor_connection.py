@@ -1,4 +1,5 @@
 from packages.frameworks.connection import SHConnectionConsumer
+import pika
 import logging
 
 logging.basicConfig(filename='shannon.log',level=logging.DEBUG)
@@ -27,6 +28,8 @@ class SensorConnection(SHConnectionConsumer):
                 print(type(body))
         except Exception as error:
             logging.error(str(error))
+
+        channel.basic_ack(method.delivery_tag)
 
 
 class SensorConnectionDelegate:

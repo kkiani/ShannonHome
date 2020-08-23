@@ -39,6 +39,8 @@ class SecurityService(SHServiceConsumer, SensorConnectionDelegate):
             self._push.send_message('Security alert', 'System security service is turned on')
         else:
             self.handle_unkown_event(message)
+        
+        channel.basic_ack(method.delivery_tag)
     
     # event handlers
     def handle_break_in(self):
