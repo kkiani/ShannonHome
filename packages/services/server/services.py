@@ -3,22 +3,25 @@ from packages.services.push.push_connection import PushConnection
 from packages.services.sensor.sensor_connection import SensorConnection, SensorConnectionDelegate
 from packages.services.security.security_connection import SecurityConnection, SecurityEvent
 import time
+import configparser
 
 class Services(SensorConnectionDelegate):
-    # public:
-    push = PushConnection()
-    is_auto_light = False
-    hardware = SHHardwareRequets()
-    sensors = SensorConnection()
-    security = SecurityConnection()
-
-    # private:
-    __motion_last_sensing = int(time.time())
-    __MOTION_DELAY = 2 * 60
-
     def __init__(self):
+        # public:
+        self.push = PushConnection()
+        self.is_auto_light = False
+        self.hardware = SHHardwareRequets()
+        self.sensors = SensorConnection()
         self.sensors.delegate = self
         self.sensors.start()
+        self.security = SecurityConnection()
+        self.config = configparser.ConfigParser()
+        self.config.read('/etc/shannon.conf')
+
+        # private:
+        self.__motion_last_sensing = int(time.time())
+        self.__MOTION_DELAY = int(self.config['SENSOR']['delay']) * 60
+
     
     def lamp(self, is_on: bool):
         self.is_auto_light = False
