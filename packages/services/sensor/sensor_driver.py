@@ -3,12 +3,24 @@ from bluepy import btle
 import binascii
 import pika
 import threading
+import logging
 
 class SensorBroadcaster(btle.DefaultDelegate):
-    __EXCHANGE_NAME = "com.shannon.sensor.motion"
-
     def __init__(self):
+        self.__EXCHANGE_NAME = "com.shannon.sensor.motion"
+        self.__motion_data_collector = self.__generate_data_collector('motion')
         btle.DefaultDelegate.__init__(self)
+    
+    def __generate_data_collector(self, name):
+        logger = logging.getLogger('{}.{}'.format('com.shannon.sensor', name))
+        log_formatter = logging.Formatter('%(asctime)s:%(message)s')
+        file_handler = logging.FileHandler(name, mode='w')
+        file_handler.setFormatter(log_formatter)
+        logger.addHandler(file_handler)
+        logger.setLevel(logging.INFO)
+
+        return logger
+
 
     def send(self, message):
         self.connect()
@@ -28,8 +40,10 @@ class SensorBroadcaster(btle.DefaultDelegate):
         status_code = binascii.hexlify(data)
         if status_code == b'30':
             self.send('sensing')
+            self.__motion_data_collector.info('True')
         elif status_code == b'31':
             self.send('not sensing')
+            self.__motion_data_collector.info('False')
         else:
             print(status_code)
 

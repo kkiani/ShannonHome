@@ -1,0 +1,13 @@
+DEBUG:root:This message should go to the log file
+DEBUG:root:This message should go to the log file
+DEBUG:root:This message should go to the log file
+INFO:com.shannon.sensor.motion.tracker:fap
+DEBUG:com.shannon.sensor.motion.tracker:fap
+DEBUG:foo.log:bazinga
+DEBUG:com.shannon.sensor.motion.tracker:fap
+DEBUG:com.shannon.sensor.motion.tracker:fap
+DEBUG:foo.log:bazinga
+DEBUG:foo.log:bazinga
+INFO:foo:ffo
+INFO:foo:ffoddd
+INFO:root:jagh
