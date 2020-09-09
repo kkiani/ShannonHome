@@ -13,8 +13,8 @@ class SensorBroadcaster(btle.DefaultDelegate):
     
     def __generate_data_collector(self, name):
         logger = logging.getLogger('{}.{}'.format('com.shannon.sensor', name))
-        log_formatter = logging.Formatter('%(asctime)s:%(message)s')
-        file_handler = logging.FileHandler(name, mode='w')
+        log_formatter = logging.Formatter('%(asctime)s;%(message)s')
+        file_handler = logging.FileHandler('{}.csv'.format(name), mode='w')
         file_handler.setFormatter(log_formatter)
         logger.addHandler(file_handler)
         logger.setLevel(logging.INFO)
