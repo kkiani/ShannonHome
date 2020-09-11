@@ -40,10 +40,10 @@ class SensorBroadcaster(btle.DefaultDelegate):
         status_code = binascii.hexlify(data)
         if status_code == b'30':
             self.send('sensing')
-            self.__motion_data_collector.info('True')
+            # self.__motion_data_collector.info('True')
         elif status_code == b'31':
             self.send('not sensing')
-            self.__motion_data_collector.info('False')
+            # self.__motion_data_collector.info('False')
         else:
             print(status_code)
 
