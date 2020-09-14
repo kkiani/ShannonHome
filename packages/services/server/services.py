@@ -2,6 +2,7 @@ from packages.services.hws.hardware_requests import SHHardwareRequets
 from packages.services.push.push_connection import PushConnection
 from packages.services.sensor.sensor_connection import SensorConnection, SensorConnectionDelegate
 from packages.services.security.security_connection import SecurityConnection, SecurityEvent
+from packages.services.led_strip.led_connection import LEDConnection
 import time
 import configparser
 
@@ -17,6 +18,7 @@ class Services(SensorConnectionDelegate):
         self.security = SecurityConnection()
         self.config = configparser.ConfigParser()
         self.config.read('/etc/shannon.conf')
+        self.led_strip = LEDConnection()
 
         # private:
         self.__motion_last_sensing = int(time.time())

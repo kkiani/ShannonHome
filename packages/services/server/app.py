@@ -65,6 +65,23 @@ def door():
         "message": "door unlocked"
     })
 
+@app.route('/system/led', endpoint='led')
+@auth_require
+def led():
+    color = request.args.get('color')
+    if color == 'red':
+        services.led_strip.turn_red()
+    elif color == 'green':
+        services.led_strip.turn_green()
+    elif color == 'blue':
+        services.led_strip.turn_blue()
+    elif color == 'off':
+        services.led_strip.turn_off()
+
+    return jsonify({
+        "message": "led color set successfuly."
+    })
+
 @app.route('/system/autolight', endpoint='autolight')
 @auth_require
 def autolight():
