@@ -1,0 +1,8 @@
+Package: shannon
+Version: 2.1-0
+Section: base
+Maintainer: Kiarash Kiani <kiani@kiarash.info>
+Depends: python3 (>=3.7), rabbitmq-server
+Architecture: armhf
+Description: Shannon Home Automation System
+ this is Shannon Home Automation system built in python 3 for raspberry pi and arduino

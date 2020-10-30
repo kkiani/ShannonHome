@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+SOURCE="https://github.com/kkiani/ShannonHome"
+
+echo "------- Shannon Home Automation platform (2.0) ------- "
+echo "- copyright ~> Kiarash Kiani                         - "
+echo "- email     ~> kiani@kiarash.info                    - "
+echo "- repo      ~> ${SOURCE} - "
+echo "------------------------------------------------------ "
+
+function checkRequierments {
+    status "[*] check requierments exist."
+    if [ ! -f /etc/shannon.conf ]; then
+        error "[!] config file does not exist!"
+    fi
+}
+
+function run {
+    status "[*] running services."
+    sudo service rabbitmq-server start
+    sudo nohup python3 -m packages.services.hws.hardware_service & disown
+    sudo nohup python3 -m packages.services.sensor.sensor_driver &
+    # sudo nohup python3 -m packages.services.led_strip.led_service &
+    sudo nohup python3 -m packages.services.security.security_service &
+    sudo nohup python3 -m packages.services.server.app & disown
+}
+
+function cleanSystem {
+    status "[*] clear cache file system."
+    sudo rm -R /pid/*
+    rm -r nohup.out
+}
+
+function update {
+    status "[*] pull updates from source."
+    git clean -df
+    git checkout -- .
+    git pull origin master
+}
+
+function error {
+    COLOR='\033[1;31m'
+    NC='\033[0m'
+
+    echo -e "${COLOR}$1${NC}"
+    exit 1
+}
+
+function status {
+    COLOR='\033[1;33m'
+    NC='\033[0m'
+
+    echo -e "${COLOR}$1${NC}"
+}
+
+cleanSystem
+update
+checkRequierments
+run
