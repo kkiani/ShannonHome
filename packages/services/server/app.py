@@ -130,9 +130,9 @@ def lamp():
 # @auth_require
 def lamp_state():
     if services.hardware.is_lamp_on:
-        return 1
+        return "1"
     else:
-        return 0
+        return "0"
 
 @app.route('/system/security', endpoint='security')
 # @auth_require
