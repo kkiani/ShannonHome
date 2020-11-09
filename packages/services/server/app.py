@@ -126,6 +126,14 @@ def lamp():
             "message": "state parameter should be switch, on or off only"
         }), 406
 
+@app.route('/system/lamp/state', endpoint='lamp')
+# @auth_require
+def lamp():
+    if services.hardware.is_lamp_on:
+        return 1
+    else:
+        return 0
+
 @app.route('/system/security', endpoint='security')
 # @auth_require
 def security():
