@@ -58,7 +58,7 @@ def test():
 
 ### ---- system actions
 @app.route('/system/door', endpoint='door')
-# @auth_require
+@auth_require
 def door():
     services.door()
     return jsonify({
@@ -66,7 +66,7 @@ def door():
     })
 
 @app.route('/system/led', endpoint='led')
-# @auth_require
+@auth_require
 def led():
     color = request.args.get('color')
     if color == 'red':
@@ -83,7 +83,7 @@ def led():
     })
 
 @app.route('/system/autolight', endpoint='autolight')
-# @auth_require
+@auth_require
 def autolight():
     state = request.args.get('state')
     if state == 'on':
@@ -103,7 +103,7 @@ def autolight():
 
 
 @app.route('/system/lamp', endpoint='lamp')
-# @auth_require
+@auth_require
 def lamp():
     state = request.args.get('state')
     if state == 'switch':
@@ -127,7 +127,7 @@ def lamp():
         }), 406
 
 @app.route('/system/lamp/state', endpoint='lamp_state')
-# @auth_require
+@auth_require
 def lamp_state():
     if services.hardware.is_lamp_on:
         return "1"
@@ -135,7 +135,7 @@ def lamp_state():
         return "0"
 
 @app.route('/system/security', endpoint='security')
-# @auth_require
+@auth_require
 def security():
     state = request.args.get('state')
     if state == 'on':
